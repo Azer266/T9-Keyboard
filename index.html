@@ -1,0 +1,180 @@
+<html>
+<head>
+<style>
+#phone button {
+  height: 50px;
+  width: 75px;
+}
+
+#phone button span {
+  display: block;
+  margin-top: 5px;
+  font-size: 10px;
+}
+
+#result {
+  width: 225px;
+  height: 25px;
+  margin-left: 2px;
+}
+
+</style>
+</head>
+
+<body>
+  <table id="phone">
+    <tr>
+      <td colspan="3">
+        <input type="text" id="result" />
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button data-value="1" class="key">1
+          <span>. , !</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="2" class="key">2
+          <span>a b c</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="3" class="key">3
+          <span>d e f</span>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button data-value="4" class="key">4
+          <span>g h i</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="5" class="key">5
+          <span>j k l</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="6" class="key">6
+          <span>m n o</span>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button data-value="7" class="key">7
+          <span>p q r s</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="8" class="key">8
+          <span>t u v</span>
+        </button>
+      </td>
+      <td>
+        <button data-value="9" class="key">9
+          <span>w x y z</span>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <button data-value="*" class="key">*</button>
+      </td>
+      <td>
+        <button data-value="0" class="key">0</button>
+      </td>
+      <td>
+        <button data-value="#" class="key">#</button>
+      </td>
+    </tr>
+  </table>
+
+</body>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<script>
+
+var time = new Date().getTime();
+var up,down;
+$(document).ready(function() {
+  $("#phone").find('button').mousedown(function(event){
+    down = new Date().getTime();
+  })
+
+  $("#phone").find("button").mouseup(function(event) {
+    up = new Date().getTime();
+    var button_pressed = $(event.currentTarget).data("value")
+    $("#result").val(t9($("#result").val(), button_pressed))
+  })
+})
+var map ={
+  '1': '.,!',
+  '2' : 'abc',
+  '3' : 'def',
+  '4' : 'ghi',
+  '5' : 'jkl',
+  '6' : 'mno',
+  '7' : 'pqrs',
+  '8' : 'tuv',
+  '9' : 'wxyz',
+  '*' : '*',
+  '0' : '0',
+  '#' : '#',
+}
+var delay = 1000;
+var prev_button='0';
+var char =0
+function t9(text, button_pressed) {
+  // Write your code here
+
+  current_time =new Date().getTime()
+  var diff = current_time -time;
+  time = current_time;
+  if ( (diff>delay) || (button_pressed!=prev_button) ){
+    char =0;
+  }
+  var ctext=text;
+  if ( up-down > 500){
+    ctext+= button_pressed;
+  }
+  else{
+    ctext +=map[button_pressed][char];
+  }
+  if (prev_button==button_pressed){
+    if (diff<delay)  {
+      var res_length = text.length;
+      if (button_pressed=='*' || button_pressed=='0' || button_pressed=='#' ){
+        char =0;
+      }
+      else{
+        char++;
+        console.log('here')
+      }
+      console.log(char);
+      ctext = text.substr(0,res_length-1) + map[button_pressed][char];
+      if( char== map[button_pressed].length-1){
+        char=-1;
+      }
+    }
+    else{
+      char =0;
+    }
+  }
+  else{
+    char=0;
+  }
+  prev_button = button_pressed;
+
+  text = ctext;
+  return text
+}
+
+
+
+</script>
+</html>
